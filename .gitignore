@@ -1,0 +1,7 @@
+.DS_Store
+*.log
+TODO.md
+/public
+/config
+/bin
+/node_modules
