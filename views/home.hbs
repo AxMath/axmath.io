@@ -239,11 +239,11 @@
                   <h2 class="morph-clone">Update Pro Version</h2>
                   <form>
                     <p>
-                    	<label>Email Address</label>
+                    	<label>Email Address <span class="email-error text-warning pull-right"></span></label>
                     	<input type="text" name="stripe-email" placeholder="We'll send you license file later" required/>
                     </p>
                     <p>
-                      <label>AxMath Lic Key</label>
+                      <label>AxMath Lic Key <span class="lickey-error text-warning pull-right"></span></label>
                       <input type="text" name="stripe-lickey" placeholder="XXXXX-XXXXX-XXXXX-XXXXX" required/>
                     </p>
                     <p>
@@ -446,21 +446,29 @@
     });
 
     $('button[name=stripe-pay]').on('click', function(e) {
+      // Clear error messages
+      $('span.email-error').text('');
+      $('span.lickey-error').text('');
+      // Email and lickey values
       var email = $('input[name=stripe-email]').val();
       var lickey = $('input[name=stripe-lickey]').val();
-      // check email and lickey, error return
+      // Check email and lickey
       var reEmail = new RegExp("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
       var reLicKey = new RegExp("^[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}$");
-      if (!reEmail.test(email)) {
-        alert("Invalid Email");
-        return;
+      var isValidEmail = reEmail.test(email);
+      var isValidLicKey = reLicKey.test(lickey);
+      if (!isValidEmail) {
+        $('span.email-error').text('Invalid Email Address');
       }
 
-      if (!reLicKey.test(lickey)) {
-        alert("Invalid Lic Key");
-        return;
+      if (!isValidLicKey) {
+        $('span.lickey-error').text('Invalid License Key');
       }
 
+      if (!(isValidEmail && isValidLicKey)) {
+        return;
+      };
+      // Checkout open
       handler.open({
         name: 'AxMath Pro',
         description: 'AxMath Pro License',
