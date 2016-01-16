@@ -239,15 +239,15 @@
                   <h2 class="morph-clone">Update Pro Version</h2>
                   <form>
                     <p>
-                    	<label type="email">Email Address</label>
-                    	<input type="text" placeholder="We'll send you license file later" required/>
+                    	<label>Email Address</label>
+                    	<input type="text" name="stripe-email" placeholder="We'll send you license file later" required/>
                     </p>
                     <p>
                       <label>AxMath Lic Key</label>
-                      <input type="text" placeholder="XXXXX-XXXXX-XXXXX-XXXXX" required/>
+                      <input type="text" name="stripe-lickey" placeholder="XXXXX-XXXXX-XXXXX-XXXXX" required/>
                     </p>
                     <p>
-                      <button>Pay Now</button>
+                      <button type="button" name="stripe-pay">Pay Now</button>
                     </p>
                     <!-- <p>
                       <a href="/tos">Terms of Service</a>
@@ -429,4 +429,52 @@
     </div>
   </footer>
 
+  <!-- Setup Stripe -->
+  <script src="https://checkout.stripe.com/checkout.js"></script>
+
+  <script>
+
+    var handler = StripeCheckout.configure({
+      key: '{{stripe_pk}}',
+      image: '/img/logo.jpg',
+      locale: 'auto',
+      token: function(token) {
+        // Use the token to create the charge with a server-side script.
+        // You can access the token ID with `token.id`
+        // Pass data to /license
+      }
+    });
+
+    $('button[name=stripe-pay]').on('click', function(e) {
+      var email = $('input[name=stripe-email]').val();
+      var lickey = $('input[name=stripe-lickey]').val();
+      // check email and lickey, error return
+      var reEmail = new RegExp("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
+      var reLicKey = new RegExp("^[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}$");
+      if (!reEmail.test(email)) {
+        alert("Invalid Email");
+        return;
+      }
+
+      if (!reLicKey.test(lickey)) {
+        alert("Invalid Lic Key");
+        return;
+      }
+
+      handler.open({
+        name: 'AxMath Pro',
+        description: 'AxMath Pro License',
+        amount: 2000,
+        email: email
+      });
+      e.preventDefault();
+    });
+
+    $(window).on('popstate', function() {
+      handler.close();
+    });
+
+    
+      
+  </script>
 
