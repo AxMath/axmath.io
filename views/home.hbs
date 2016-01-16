@@ -1,4 +1,4 @@
-<body id="home">
+
 
   <!-- Preloader -->
   <div id="preloader">
@@ -6,7 +6,7 @@
   </div>
 
   <!-- FullScreen -->
-  <div class="intro-header">
+  <div id="header" class="intro-header">
     <div class="col-xs-12 text-center abcen1">
       <h1 class="h1_home wow fadeIn" data-wow-delay="0.4s">AxMath</h1>
       <h3 class="h3_home wow fadeIn" data-wow-delay="0.6s">Your Ultimate Equation Editor</h3>
@@ -34,13 +34,13 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#home">AxMath</a>
+        <a class="navbar-brand" href="#header">AxMath</a>
       </div>
       <div class="collapse navbar-collapse navbar-right navbar-ex1-collapse">
         <ul class="nav navbar-nav">
           <li class="menuItem"><a href="#whatis">What is?</a></li>
           <li class="menuItem"><a href="#useit">Use It</a></li>
-          <li class="menuItem"><a href="#screen">Screenshot</a></li>
+          <li class="menuItem"><a href="#buy">Buy Pro</a></li>
           <li class="menuItem"><a href="#credits">Credits</a></li>
           <li class="menuItem"><a href="#contact">Contact</a></li>
         </ul>
@@ -108,13 +108,13 @@
           <img class="img-responsive " src="img/ipad.png" alt="">
         </div>
         <div class="col-sm-6 wow fadeInLeftBig" data-animation-delay="200">
-          <h3 class="section-heading">Full Responsive</h3>
+          <h3 class="section-heading">Scrollable Panel</h3>
           <div class="sub-title lead3">Lorem ipsum dolor sit atmet sit dolor greand fdanrh
             <br> sdfs sit atmet sit dolor greand fdanrh sdfs</div>
           <p class="lead">
             In his igitur partibus duabus nihil erat, quod Zeno commuta rest gestiret. Sed virtutem ipsam inchoavit, nihil ampliusuma. Scien tiam pollicentur, uam non erat mirum sapientiae lorem cupido patria esse cariorem. Quae qui non vident, nihilamane umquam magnum ac cognitione.
           </p>
-          <p><a class="btn btn-embossed btn-primary" href="#" role="button">View Details</a>
+          <p><a class="btn btn-embossed btn-primary" href="#downloadlink" role="button">Free Download</a>
             <a class="btn btn-embossed btn-info" href="#" role="button">Visit Website</a></p>
         </div>
       </div>
@@ -144,7 +144,7 @@
           </div>
         </div>
         <div class="col-sm-6 wow fadeInRightBig" data-animation-delay="200">
-          <h3 class="section-heading">Drag Gallery</h3>
+          <h3 class="section-heading">Word & LaTeX Support</h3>
           <div class="sub-title lead3">Lorem ipsum dolor sit atmet sit dolor greand fdanrh
             <br> sdfs sit atmet sit dolor greand fdanrh sdfs</div>
           <p class="lead">
@@ -223,7 +223,7 @@
     </div>
   </div>
 
-  <div class="content-section-c ">
+  <div id="buy" class="content-section-c ">
     <div class="container">
       <div class="row">
         <div class="col-md-6 col-md-offset-3 text-center wrap_title white">
@@ -240,11 +240,11 @@
                   <form>
                     <p>
                     	<label type="email">Email Address</label>
-                    	<input type="text" />
+                    	<input type="text" placeholder="Send you a license file later" required/>
                     </p>
                     <p>
-                      <label>AxMath User Key</label>
-                      <input type="text" />
+                      <label>AxMath Lic Key</label>
+                      <input type="text" placeholder="XXXXX-XXXXX-XXXXX-XXXXX" required/>
                     </p>
                     <p>
                       <button>Pay Now</button>
@@ -331,7 +331,7 @@
       <div class="row">
         <div class="col-md-6 col-md-offset-3 text-center wrap_title">
           <h2>Download Free</h2>
-          <p class="lead" style="margin-top:0">Latest Version: v2.4.0</p>
+          <p class="lead" style="margin-top:0">Latest Version: {{axmath_ver}}</p>
           <p><a class="btn btn-embossed btn-primary view" role="button" href="{{download_url}}" target="_blank">Free Download</a></p>
         </div>
       </div>
@@ -344,7 +344,7 @@
       <div class="row">
         <div class="col-md-6 col-md-offset-3 text-center wrap_title">
           <h2>Contact Us</h2>
-          <p class="lead" style="margin-top:0">A special thanks to Death.</p>
+          <p class="lead" style="margin-top:0">Need 50 licenses or more!</p>
         </div>
         <form role="form" action="" method="post">
           <div class="col-md-6">
@@ -375,18 +375,20 @@
         <hr class="featurette-divider hidden-lg">
         <div class="col-md-5 col-md-push-1 address">
           <address>
-            <h3>Office Location</h3>
-            <p class="lead"><a href="#">The Pentagon<br>
-					Washington, DC 20301</a>
-              <br> Phone: XXX-XXX-XXXX
-              <br> Fax: XXX-XXX-YYYY</p>
+            <h3>Bulk Option</h3>
+            <p class="lead">
+              For companies and organizations <br>
+					    For 50 licenses or more <br> 
+              Offer a discount based on quantity <br> 
+              Contact us for bulk option!
+            </p>
           </address>
           <h3>Social</h3>
           <li class="social">
-            <a href="#"><i class="fa fa-facebook-square fa-size"> </i></a>
-            <a href="#"><i class="fa fa-twitter-square fa-size"> </i> </a>
-            <a href="#"><i class="fa fa-google-plus-square fa-size"> </i></a>
-            <a href="#"><i class="fa fa-flickr fa-size"> </i> </a>
+            <a href="{{facebook_url}}"><i class="fa fa-facebook-square fa-size"> </i></a>
+            <a href="{{twitter_url}}"><i class="fa fa-twitter-square fa-size"> </i> </a>
+            <a href="{{linkedin_url}}"><i class="fa fa-linkedin-square fa-size"> </i></a>
+            <a href="#"><i class="fa fa-share-alt-square fa-size"> </i> </a>
           </li>
         </div>
       </div>
@@ -423,5 +425,4 @@
     </div>
   </footer>
 
-</body>
 
