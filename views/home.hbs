@@ -384,13 +384,14 @@
               For companies and organizations <br>
 					    For 50 licenses or more <br> 
               Offer a discount based on quantity <br> 
-              Contact us for bulk option!
+              Contact us for bulk option! <br>
+              Email: <a href="mailto:{{admin_email}}">admin@axmath.io</a>
             </p>
           </address>
           <h3>Social</h3>
           <li class="social">
             <a href="{{facebook_url}}"><i class="fa fa-facebook-square fa-size"> </i></a>
-            <a href="{{twitter_url}}"><i class="fa fa-twitter-square fa-size"> </i> </a>
+            <a href="{{twitter_url}}"><i class="fa fa-twitter-square fa-size"> </i></a>
             <a href="{{linkedin_url}}"><i class="fa fa-linkedin-square fa-size"> </i></a>
             <a href="#"><i class="fa fa-share-alt-square fa-size"> </i> </a>
           </li>
@@ -441,7 +442,7 @@
       token: function(token) {
         // Use the token to create the charge with a server-side script.
         // You can access the token ID with `token.id`
-        // Pass data to /license
+        // Pass data to /license and go to /license
       }
     });
 
@@ -454,7 +455,7 @@
       var lickey = $('input[name=stripe-lickey]').val();
       // Check email and lickey
       var reEmail = new RegExp("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
-      var reLicKey = new RegExp("^[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}$");
+      var reLicKey = new RegExp("^([A-Z0-9]{5}-){3}[A-Z0-9]{5}$");
       var isValidEmail = reEmail.test(email);
       var isValidLicKey = reLicKey.test(lickey);
       if (!isValidEmail) {
