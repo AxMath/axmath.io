@@ -5,7 +5,7 @@ var config = require(__dirname + '/../config/config.json')[env];
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  console.log(config);
+  // console.log(config);
   res.render('home', config);
 });
 
