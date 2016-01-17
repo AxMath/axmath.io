@@ -335,7 +335,7 @@
       <div class="row">
         <div class="col-md-6 col-md-offset-3 text-center wrap_title">
           <h2>Download Free</h2>
-          <p class="lead" style="margin-top:0">Latest Version: {{axmath_ver}}</p>
+          <p class="lead" style="margin-top:0">Version {{axmath_ver}} released on {{axmath_date}}</p>
           <p><a class="btn btn-embossed btn-primary view" role="button" href="{{download_url}}" target="_blank">Free Download</a></p>
         </div>
       </div>
@@ -424,10 +424,10 @@
             <h3 class="footer-title">AxMath Site Map</h3>
             <ul>
               <li>Official Blog: <a href="{{blog_url}}">Medium Blog</a></li>
-              <li>Documentation: <a href="{{doc_url}}">Gitbook</a></li>
-              <li>Cheatsheets: <a href="{{manual_url}}">Quick Manual</a></li>
+              <li>Documentation: <a href="{{doc_url}}">Gitbook Doc</a></li>
               <li>Video Tutorial: <a href="{{video_url}}">Vimeo Section</a></li>
               <li>Online Support: <a href="{{support_url}}">Slack Channel</a></li>
+              <li>License Status: <a href="/lic/status">Download Lic</a></li>
             </ul>
             Email: <a href="mailto:{{admin_email}}">{{admin_email}}</a>
           </div>
@@ -440,17 +440,6 @@
   <script src="https://checkout.stripe.com/checkout.js"></script>
 
   <script>
-
-    var handler = StripeCheckout.configure({
-      key: '{{stripe_pk}}',
-      image: '/img/logo.jpg',
-      locale: 'auto',
-      token: function(token) {
-        // Use the token to create the charge with a server-side script.
-        // You can access the token ID with `token.id`
-        // Pass data to /license and go to /license
-      }
-    });
 
     $('button[name=stripe-pay]').on('click', function(e) {
       // Clear error messages
@@ -475,21 +464,37 @@
       if (!(isValidEmail && isValidLicKey)) {
         return;
       };
-      // Checkout open
-      handler.open({
+
+
+      StripeCheckout.open({
+        key: '{{stripe_pk}}',
+        image: '/img/logo.jpg',
+        amount: {{axmath_price}},
         name: 'AxMath Pro',
         description: 'AxMath Pro License',
-        amount: 2000,
-        email: email
+        panelLabel: 'Pay Now',
+        email: email,
+        token: function(token) {
+          var tokenid = token.id;
+          $.ajax({
+            type: "post",
+            url: "lic/pay",
+            contentType: "application/x-www-form-urlencoded",
+            dataType: "json",
+            data: {tokenid, email, lickey},
+            success: function(msg) {
+
+            }
+          });
+        }
       });
+
       e.preventDefault();
     });
 
     $(window).on('popstate', function() {
       handler.close();
     });
-
-    
       
   </script>
 
