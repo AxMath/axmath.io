@@ -482,8 +482,8 @@
             contentType: "application/x-www-form-urlencoded",
             dataType: "json",
             data: {tokenid, email, lickey},
-            success: function(msg) {
-
+            success: function() {
+              console.log('create token success');
             }
           });
         }
