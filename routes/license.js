@@ -74,15 +74,27 @@ router.post('/pay', function(req, res, next) {
   
 });
 
-router.get('/generating', function(req, res, next) {
+router.get('/list', function(req, res, next) {
   // list all lic records of licurl generating
-  res.json({});
+  RecordQuery.equalTo('licurl', 'Generating');
+  RecordQuery.select('email', 'lickey', 'status', 'licurl');
+  RecordQuery.find({
+    success: function(results) {
+      res.json(results);
+    },
+    error: function(error) {
+      console.log('Error: ' + error.code + ' ' + error.message);
+    }
+  });
 });
 
-router.post('/url', function(req, res, next) {
+router.post('/upload', function(req, res, next) {
   var pid = req.body.pid;
-  var licurl = req.body.licurl;
-  // TODO: Find record by pid, update licurl
+  var lickey = req.body.lickey;
+  var name = lickey + ".lic";
+  var file = req.body.file;
+  var license = new AV.File(name, file);
+  license.save();
 
 });
 
