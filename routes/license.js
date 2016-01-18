@@ -6,16 +6,13 @@ var config = require(__dirname + '/../config/config.json')[env];
 var stripe_sk = config.stripe_sk;
 var axmath_price = config.axmath_price;
 var stripe = require('stripe')(stripe_sk);
-// Firebase
-var Firebase = require('firebase');
-var licDataRef = new Firebase('https://axmath-io.firebaseio.com/lic');
 // LeanCloud init
 var AV = require('avoscloud-sdk');
 var AVID = config.leancloud_id;
 var AVKEY = config.leancloud_key;
 AV.initialize(AVID, AVKEY);
 AV.useAVCloudUS();
-
+// Record query and object init
 var RecordObj = AV.Object.extend('RecordObj');
 var RecordRef = new RecordObj();
 var RecordQuery = new AV.Query('RecordObj');
@@ -61,14 +58,17 @@ router.post('/pay', function(req, res, next) {
         licurl: licurl
       }
       // Create record in LeanCloud
-      RecordRef.save(record, {
-        success: function(RecordRef) {
-          console.log('New object created with objectId: ' + RecordRef.id);
-        },
-        error: function(RecordRef, error) {
-          console.log('Failed to create new object, with error message: ' + error.message);
-        }
-      });
+      // RecordRef.save(record, {
+      //   success: function(RecordRef) {
+      //     console.log('New object created with objectId: ' + RecordRef.id);
+      //   },
+      //   error: function(RecordRef, error) {
+      //     console.log('Failed to create new object, with error message: ' + error.message);
+      //   }
+      // });
+
+      RecordRef.save(record);
+
     }
   );
   
