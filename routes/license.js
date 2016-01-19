@@ -27,13 +27,20 @@ router.get('/status', function(req, res, next) {
 router.post('/status', function(req, res, next) {
   var email = req.body.email;
   var lickey = req.body.lickey;
-  // TODO: find record by email and lickey pair
-  // TODO: res the status and licurl
+  // console.log(req.body);
   RecordsQuery.equalTo('email', email);
   RecordsQuery.equalTo('lickey', lickey);
   RecordsQuery.first({
     success: function(record) {
-      //
+      // Respond status and licurl
+      var status = "Not Found";
+      var licurl = "Not Found";
+      console.log(record);
+      if (record) {
+        status = record.get('status');
+        licurl = record.get('licurl');
+      }
+      res.json({status, licurl});
     },
     error: function(error) {
       console.log('Error: ' + error.code + ' ' + error.message);
@@ -112,8 +119,8 @@ router.post('/update', function(req, res, next) {
   // var pid = req.params.pid;
   var pid = req.body.pid;
   var licurl = req.body.licurl;
-  console.log("pid: " + pid);
-  console.log("licurl: " + licurl);
+  // console.log("pid: " + pid);
+  // console.log("licurl: " + licurl);
 
   RecordsQuery.equalTo('pid', pid);
   RecordsQuery.first({

@@ -477,13 +477,12 @@
         token: function(token) {
           var tokenid = token.id;
           $.ajax({
-            type: "post",
-            url: "lic/pay",
-            contentType: "application/x-www-form-urlencoded",
+            type: "POST",
+            url: "/lic/pay",
             dataType: "json",
             data: {tokenid, email, lickey},
             success: function() {
-              console.log('create token success');
+              console.log('create and pass token success');
             }
           });
         }
