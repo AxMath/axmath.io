@@ -8,14 +8,14 @@ var axmath_price = config.axmath_price;
 var stripe = require('stripe')(stripe_sk);
 // LeanCloud init
 var AV = require('avoscloud-sdk');
-var AVID = config.leancloud_id;
-var AVKEY = config.leancloud_key;
-AV.initialize(AVID, AVKEY);
+var AV_ID = config.leancloud_id;
+var AV_KEY = config.leancloud_key;
+AV.initialize(AV_ID, AV_KEY);
 AV.useAVCloudUS();
 // Record query and object init
-var RecordObj = AV.Object.extend('RecordObj');
-var RecordRef = new RecordObj();
-var RecordQuery = new AV.Query('RecordObj');
+var RecordsObj = AV.Object.extend('Records');
+var RecordsRef = new RecordsObj();
+var RecordsQuery = new AV.Query('Records');
 
 router.get('/status', function(req, res, next) {
   // var email = req.cookies.email;
@@ -35,67 +35,89 @@ router.post('/pay', function(req, res, next) {
   var tokenid = req.body.tokenid;
   var email = req.body.email;
   var lickey = req.body.lickey;
-  // res.cookie('email', email);
-  // res.cookie('lickey', lickey);
-  // res.json(req.body);
-  // console.log(tokenid, email, lickey);
+
   stripe.charges.create({
       amount: axmath_price,
       currency: 'usd',
       source: tokenid,
       metadata: {'lickey': lickey}
     }, function(error, charge) {
+
       var licurl = "None";
-      if (charge.status == "succeeded") {
+      var status = "None";
+      var pid = "None";
+
+      if (error) {
+        status = error.type;
+        console.log("Error: " + error.message);
+      }
+      
+      if (charge) {
+        status = charge.status;
+        pid = charge.id;
+      }
+
+      if (status === "succeeded") {
         licurl = "Generating";
       }
+
       var record = {
         email: email,
         lickey: lickey,
-        pid: charge.id,
-        status: charge.status,
-        created: charge.created,
+        pid: pid,
+        status: status,
         licurl: licurl
       }
       // Create record in LeanCloud
-      // RecordRef.save(record, {
-      //   success: function(RecordRef) {
-      //     console.log('New object created with objectId: ' + RecordRef.id);
-      //   },
-      //   error: function(RecordRef, error) {
-      //     console.log('Failed to create new object, with error message: ' + error.message);
-      //   }
-      // });
+      RecordsRef.save(record, {
+        success: function(record) {
+          console.log('New record created with ID: ' + record.id);
+        },
+        error: function(record, error) {
+          console.log('Failed to create record, error message: ' + error.message);
+        }
+      });
+    });
 
-      RecordRef.save(record);
+    // Redirect
+    // res.redirect('/lic/status');
 
-    }
-  );
-  
 });
 
 router.get('/list', function(req, res, next) {
   // list all lic records of licurl generating
-  RecordQuery.equalTo('licurl', 'Generating');
-  RecordQuery.select('email', 'lickey', 'status', 'licurl');
-  RecordQuery.find({
-    success: function(results) {
-      res.json(results);
+  RecordsQuery.equalTo('licurl', 'Generating');
+  RecordsQuery.find({
+    success: function(records) {
+      res.json(records);
     },
     error: function(error) {
       console.log('Error: ' + error.code + ' ' + error.message);
+      res.json(error);
     }
   });
 });
 
 router.post('/upload', function(req, res, next) {
   var pid = req.body.pid;
-  var lickey = req.body.lickey;
-  var name = lickey + ".lic";
+  var name = req.body.lickey + ".lic";
   var file = req.body.file;
-  var license = new AV.File(name, file);
-  license.save();
 
+  // TODO: Upload file
+  // var license = new AV.File(name, file);
+  // license.save();
+  
+  // RecordsQuery.equalTo('pid', pid);
+  // RecordsQuery.first({
+  //   success: function(record) {
+  //     record.set('licurl', license);
+  //   },
+  //   error: function(error) {
+  //     console.log('Error: ' + error.code + ' ' + error.message);
+  //   }
+  // })
 });
+
+// multer upload multipart/form-data?
 
 module.exports = router;
