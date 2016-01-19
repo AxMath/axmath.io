@@ -18,9 +18,6 @@ var RecordsRef = new RecordsObj();
 var RecordsQuery = new AV.Query('Records');
 
 router.get('/status', function(req, res, next) {
-  // var email = req.cookies.email;
-  // var lickey = req.cookies.lickey;
-  // res.render('lic_status', {email, lickey});
   res.render('lic_status');
 });
 
@@ -33,8 +30,8 @@ router.post('/status', function(req, res, next) {
   RecordsQuery.first({
     success: function(record) {
       // Respond status and licurl
-      var status = "Not Found";
-      var licurl = "Not Found";
+      var status = "Record Not Found";
+      var licurl = "Record Not Found";
       console.log(record);
       if (record) {
         status = record.get('status');
@@ -66,12 +63,14 @@ router.post('/pay', function(req, res, next) {
 
       if (error) {
         status = error.type;
+        pid = error.type;
         console.log("Error: " + error.message);
       }
       
       if (charge) {
         status = charge.status;
         pid = charge.id;
+        console.log("Charge: " + status);
       }
 
       if (status === "succeeded") {
@@ -119,8 +118,6 @@ router.post('/update', function(req, res, next) {
   // var pid = req.params.pid;
   var pid = req.body.pid;
   var licurl = req.body.licurl;
-  // console.log("pid: " + pid);
-  // console.log("licurl: " + licurl);
 
   RecordsQuery.equalTo('pid', pid);
   RecordsQuery.first({
@@ -135,7 +132,5 @@ router.post('/update', function(req, res, next) {
     }
   })
 });
-
-// multer upload multipart/form-data?
 
 module.exports = router;
