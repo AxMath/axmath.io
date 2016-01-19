@@ -29,6 +29,16 @@ router.post('/status', function(req, res, next) {
   var lickey = req.body.lickey;
   // TODO: find record by email and lickey pair
   // TODO: res the status and licurl
+  RecordsQuery.equalTo('email', email);
+  RecordsQuery.equalTo('lickey', lickey);
+  RecordsQuery.first({
+    success: function(record) {
+      //
+    },
+    error: function(error) {
+      console.log('Error: ' + error.code + ' ' + error.message);
+    }
+  });
 });
 
 router.post('/pay', function(req, res, next) {
@@ -98,24 +108,25 @@ router.get('/list', function(req, res, next) {
   });
 });
 
-router.post('/upload', function(req, res, next) {
+router.post('/update', function(req, res, next) {
+  // var pid = req.params.pid;
   var pid = req.body.pid;
-  var name = req.body.lickey + ".lic";
-  var file = req.body.file;
+  var licurl = req.body.licurl;
+  console.log("pid: " + pid);
+  console.log("licurl: " + licurl);
 
-  // TODO: Upload file
-  // var license = new AV.File(name, file);
-  // license.save();
-  
-  // RecordsQuery.equalTo('pid', pid);
-  // RecordsQuery.first({
-  //   success: function(record) {
-  //     record.set('licurl', license);
-  //   },
-  //   error: function(error) {
-  //     console.log('Error: ' + error.code + ' ' + error.message);
-  //   }
-  // })
+  RecordsQuery.equalTo('pid', pid);
+  RecordsQuery.first({
+    success: function(record) {
+      record.set('licurl', licurl);
+      record.save();
+      res.send('Update licurl success!');
+    },
+    error: function(error) {
+      console.log('Error: ' + error.code + ' ' + error.message);
+      res.send('Error: ' + error.code + ' ' + error.message);
+    }
+  })
 });
 
 // multer upload multipart/form-data?
