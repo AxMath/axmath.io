@@ -12,19 +12,16 @@ var AV_ID = config.leancloud_id;
 var AV_KEY = config.leancloud_key;
 AV.initialize(AV_ID, AV_KEY);
 AV.useAVCloudUS();
-// Record query and object init
-var RecordsObj = AV.Object.extend('Records');
-var RecordsRef = new RecordsObj();
-var RecordsQuery = new AV.Query('Records');
 
 router.get('/status', function(req, res, next) {
   res.render('lic_status');
 });
 
 router.post('/status', function(req, res, next) {
-  var email = req.body.email;
-  var lickey = req.body.lickey;
-  // console.log(req.body);
+  var RecordsQuery = new AV.Query('Records');
+  var email = req.body.email.toString();
+  var lickey = req.body.lickey.toString();
+  // console.log(lickey);
   RecordsQuery.equalTo('email', email);
   RecordsQuery.equalTo('lickey', lickey);
   RecordsQuery.first({
@@ -32,12 +29,12 @@ router.post('/status', function(req, res, next) {
       // Respond status and licurl
       var status = "Record Not Found";
       var licurl = "Record Not Found";
-      console.log(record);
+      // console.log(record);
       if (record) {
         status = record.get('status');
         licurl = record.get('licurl');
       }
-      res.json({status, licurl});
+      res.status(200).json({status, licurl});
     },
     error: function(error) {
       console.log('Error: ' + error.code + ' ' + error.message);
@@ -46,9 +43,12 @@ router.post('/status', function(req, res, next) {
 });
 
 router.post('/pay', function(req, res, next) {
-  var tokenid = req.body.tokenid;
-  var email = req.body.email;
-  var lickey = req.body.lickey;
+  var tokenid = req.body.tokenid.toString();
+  var email = req.body.email.toString();
+  var lickey = req.body.lickey.toString();
+
+  var RecordsObj = AV.Object.extend('Records');
+  var RecordsRef = new RecordsObj();
 
   stripe.charges.create({
       amount: axmath_price,
@@ -101,11 +101,12 @@ router.post('/pay', function(req, res, next) {
 });
 
 router.get('/list', function(req, res, next) {
+  var RecordsQuery = new AV.Query('Records');
   // list all lic records of licurl generating
   RecordsQuery.equalTo('licurl', 'Generating');
   RecordsQuery.find({
     success: function(records) {
-      res.json(records);
+      res.status(200).json(records);
     },
     error: function(error) {
       console.log('Error: ' + error.code + ' ' + error.message);
@@ -114,10 +115,15 @@ router.get('/list', function(req, res, next) {
   });
 });
 
+router.get('/all', function(req, res) {
+  res.send({'lic': 'all'});
+});
+
 router.post('/update', function(req, res, next) {
+  var RecordsQuery = new AV.Query('Records');
   // var pid = req.params.pid;
-  var pid = req.body.pid;
-  var licurl = req.body.licurl;
+  var pid = req.body.pid.toString();
+  var licurl = req.body.licurl.toString();
 
   RecordsQuery.equalTo('pid', pid);
   RecordsQuery.first({
